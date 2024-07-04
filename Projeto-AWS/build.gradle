@@ -22,7 +22,7 @@ plugins {
 }
 
 group = 'marttiins'
-version = '0.1.1-SNAPSHOT'
+version = '1.0.0-SNAPSHOT'
 
 bootJar {
 	archiveBaseName = 'aws_project'
@@ -50,6 +50,10 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
