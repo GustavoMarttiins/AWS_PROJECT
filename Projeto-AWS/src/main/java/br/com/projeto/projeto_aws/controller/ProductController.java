@@ -1,6 +1,7 @@
-package br.com.projeto.projeto_aws;
+package br.com.projeto.projeto_aws.controller;
 
 import br.com.projeto.projeto_aws.entity.Product;
+import br.com.projeto.projeto_aws.enums.EventType;
 import br.com.projeto.projeto_aws.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,7 @@ public class ProductController {
     @GetMapping("/{id}")
     public Optional<Product> getProductById(@PathVariable Long id) {
         Optional<Product> produtc = productService.productById(id);
+
         return new ResponseEntity<>(produtc, HttpStatus.OK).getBody();
     }
 
@@ -32,12 +34,24 @@ public class ProductController {
     @PostMapping("create")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product createProduct = productService.createProduct(product);
+        productService.publishProductEvent(createProduct, EventType.PRODUCT_CREATED, "Martins");
+
         return new ResponseEntity<>(createProduct, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product newProductData) {
         Product updatedProduct = productService.updateProduct(id, newProductData);
+        productService.publishProductEvent(updatedProduct, EventType.PRODUCT_UPDATE, "Gustavo");
+
         return ResponseEntity.ok(updatedProduct);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        productService.publishProductEvent(null, EventType.PRODUCT_DELETED, "Souza");
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
